@@ -1,15 +1,50 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../../context/AuthProvider';
 
 const Navbar = () => {
+    const {logoutUser, user} = useContext(AuthContext);
+    const navigate = useNavigate();
+    const handelLogOut = () => {
+        logoutUser()
+        .then(()=>{
+          navigate('/');
+        })
+        .catch(err=> console.log(err))
+    }
+    const menuItems = (
+      <React.Fragment>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/appointment">Appointment</Link>
+        </li>
+        <li>
+          <Link to="/about">About</Link>
+        </li>
+        {user?.uid ? (
+          <>
+            <li>
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
 
-    const menuItems = <React.Fragment>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/appointment">Appointment</Link></li>
-        <li><Link to="/about">About</Link></li>
-        <li><Link to="/reviews">Reviews</Link></li>
-        <li><Link to="/login">Login</Link></li>
-    </React.Fragment>
+            <button
+              onClick={handelLogOut}
+              className="btn btn-accent text-white"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <li>
+            <button className="btn btn-accent text-white">
+              <Link to="/login">Login</Link>
+            </button>
+          </li>
+        )}
+      </React.Fragment>
+    );
 
     return (
         <div className="navbar bg-base-100 flex justify-between">
