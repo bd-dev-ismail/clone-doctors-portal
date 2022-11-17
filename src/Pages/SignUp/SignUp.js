@@ -4,15 +4,23 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from '../../context/AuthProvider';
 const SignUp = () => {
     const {register, handleSubmit , formState: {errors}} = useForm();
-    const { createUser } = useContext(AuthContext);
+    const { createUser, updateUser } = useContext(AuthContext);
     const navigate = useNavigate();
     const handelSignUp = (data) => {
         console.log(data);
+        const currentUser = {
+          displayName: data.name,
+        };
         createUser(data.email,data.password)
         .then(result=> {
           const user = result.user;
           console.log(user);
-          navigate("/");
+          updateUser(currentUser)
+          .then(()=> {
+            navigate("/");
+          })
+          .catch(err=> console.log(err))
+          
         })
         .catch(err=> console.log(err))
     }
