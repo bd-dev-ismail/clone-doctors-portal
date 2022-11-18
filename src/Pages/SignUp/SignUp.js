@@ -2,10 +2,12 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { AuthContext } from '../../context/AuthProvider';
+
 const SignUp = () => {
     const {register, handleSubmit , formState: {errors}} = useForm();
     const { createUser, updateUser } = useContext(AuthContext);
     const navigate = useNavigate();
+    
     const handelSignUp = (data) => {
         console.log(data);
         const currentUser = {
@@ -17,13 +19,46 @@ const SignUp = () => {
           console.log(user);
           updateUser(currentUser)
           .then(()=> {
-            navigate("/");
+            savedUser(data.name, data.email);
+            
           })
           .catch(err=> console.log(err))
           
         })
         .catch(err=> console.log(err))
+    };
+    const savedUser = (name, email)=> {
+      const currentUser = {
+        name,
+        email
+      }
+      fetch('http://localhost:5000/users', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(currentUser)
+      }).then(res => res.json())
+      .then(data => {
+        console.log(data);
+        if (data.acknowledged){
+          
+          getUserToken(email);
+        } 
+      })
+    };
+    const getUserToken = email => {
+      fetch(`http://localhost:5000/jwt?email=${email}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data.accessToken) {
+            localStorage.setItem("access-token", data.accessToken);
+            navigate('/')
+          }
+        });
     }
+   
     return (
       <div className="flex h-[750px]   justify-center items-center text-center">
         <div className="w-96 shadow-2xl px-4 py-10">

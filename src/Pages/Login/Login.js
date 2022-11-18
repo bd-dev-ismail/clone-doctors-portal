@@ -1,23 +1,42 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState} from 'react';
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider';
+import useToken from '../../hooks/userToken';
+
 
 const Login = () => {
     const {register, handleSubmit, formState: {errors}} = useForm();
     const {loginUser} = useContext(AuthContext);
+    const [loginEmail, setLoginEmail] = useState('');
     const navigate = useNavigate();
+    // const [token] = useToken(loginEmail);
+    // if(token) {
+    //   navigate('/')
+    // }
     const handelLogin = (data )=> {
         console.log(data);
+        
         loginUser(data.email, data.password)
         .then(result => {
           const user = result.user;
           console.log(user);
-          
-          navigate("/");
+          navigate('/')
+        //  setLoginEmail(data.email);
         })
         .catch(er=> console.log(er))
     }
+    // const getUserToken = (email) => {
+    //   fetch(`http://localhost:5000/jwt?email=${email}`)
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //       console.log(data);
+    //       if (data.accessToken) {
+    //         localStorage.setItem("access-token", data.accessToken);
+    //         navigate("/");
+    //       }
+    //     });
+    // };
     return (
       <div className="flex h-[750px]   justify-center items-center text-center">
         <div className="w-96 shadow-2xl px-4 py-10">

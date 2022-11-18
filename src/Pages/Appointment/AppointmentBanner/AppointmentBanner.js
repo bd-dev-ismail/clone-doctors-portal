@@ -13,6 +13,7 @@ const AppointmentBanner = ({ setSelectedDate , selectedDate}) => {
               mode="single"
               selected={selectedDate}
               onSelect={setSelectedDate}
+              
             />
             <p>
               Your Selected DAte is:{" "}
@@ -24,5 +25,9 @@ const AppointmentBanner = ({ setSelectedDate , selectedDate}) => {
     </div>
   );
 };
-
+// onSelect={(selectedDate) => {
+// if (selectedDate) {
+// setSelectedDate(selectedDate)
+// }
+// }}
 export default AppointmentBanner;

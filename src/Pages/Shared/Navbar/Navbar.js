@@ -8,6 +8,7 @@ const Navbar = () => {
     const handelLogOut = () => {
         logoutUser()
         .then(()=>{
+          localStorage.removeItem("access-token");
           navigate('/');
         })
         .catch(err=> console.log(err))
@@ -37,11 +38,9 @@ const Navbar = () => {
             </button>
           </>
         ) : (
-          <li>
-            <button className="btn btn-accent text-white">
-              <Link to="/login">Login</Link>
-            </button>
-          </li>
+          <Link to="/login">
+            <button className="btn btn-accent text-white">Login</button>
+          </Link>
         )}
       </React.Fragment>
     );

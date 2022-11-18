@@ -8,7 +8,14 @@ const MyAppointment = () => {
         queryKey: ['bookings', user?.email],
         queryFn: async()=> {
             const res = await fetch(
-              `http://localhost:5000/bookings?email=${user?.email}`
+              `http://localhost:5000/bookings?email=${user?.email}`,
+              {
+                headers: {
+                  authorization: `Bearer ${localStorage.getItem(
+                    "access-token"
+                  )}`,
+                },
+              }
             );
             const data = await res.json();
             return data;
